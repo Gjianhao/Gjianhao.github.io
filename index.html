@@ -445,21 +445,21 @@
       
         
           
-            <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Python 的浮点数也没有大小限制，但是超出一定范围就直接表示为 inf (无限大)。</div></pre></td></tr></table></figure>
+            <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Python 的浮点数也没有大小限制，但是超出一定范围就直接表示为 `inf` (无限大)。</div></pre></td></tr></table></figure>
 <hr>
 <ul>
-<li>一个字节有8位（bit）表示最大整数是255，</li>
-<li>两个字节最大表示整数65535，</li>
-<li>4个字节最大表示4294967295；</li>
+<li>一个字节有8位（bit）表示最大整数是<code>255</code>，</li>
+<li>两个字节最大表示整数<code>65535</code>，</li>
+<li>4个字节最大表示<code>4294967295</code>；</li>
 <li>ASCII编码中每一个字符使用一个字节，</li>
 <li>Unicode编码每一个字符使用2个字节，</li>
-<li>这样如果文本使用全部英文表示，就比较浪费内存，所以推出UTF-8编码，英文字符使用一个字节，中文字符使用3个字节，偏僻的生字使用4-6个字节，</li>
-<li>在计算机内存中，统一使用Unicode编码，当需要保存到硬盘或者需要传输的时候，就会转换为utf-8编码<h5 id="对于单个字符的编码，Python供了ord-函数获取字符的整数表示-chr-函数把编码转换为对应的字符"><a href="#对于单个字符的编码，Python供了ord-函数获取字符的整数表示-chr-函数把编码转换为对应的字符" class="headerlink" title="对于单个字符的编码，Python供了ord()函数获取字符的整数表示,chr()函数把编码转换为对应的字符:"></a>对于单个字符的编码，Python供了ord()函数获取字符的整数表示,chr()函数把编码转换为对应的字符:</h5></li>
+<li>这样如果文本使用全部英文表示，就比较浪费内存，所以推出<code>UTF-8</code>编码，英文字符使用一个字节，中文字符使用3个字节，偏僻的生字使用4-6个字节，</li>
+<li>在计算机内存中，统一使用<code>Unicode</code>编码，当需要保存到硬盘或者需要传输的时候，就会转换为utf-8编码<h5 id="对于单个字符的编码，Python供了ord-函数获取字符的整数表示-chr-函数把编码转换为对应的字符"><a href="#对于单个字符的编码，Python供了ord-函数获取字符的整数表示-chr-函数把编码转换为对应的字符" class="headerlink" title="对于单个字符的编码，Python供了ord()函数获取字符的整数表示,chr()函数把编码转换为对应的字符:"></a>对于单个字符的编码，Python供了<code>ord()</code>函数获取字符的整数表示,<code>chr()</code>函数把编码转换为对应的字符:</h5></li>
 </ul>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">print(ord(&apos;人生苦短&apos;))</div><div class="line">print(chr(12002))</div></pre></td></tr></table></figure>
-<h5 id="如果要在网络上传输，或者保存到磁盘上，就需要把-str-变为以字节为单位的-bytes。"><a href="#如果要在网络上传输，或者保存到磁盘上，就需要把-str-变为以字节为单位的-bytes。" class="headerlink" title="如果要在网络上传输，或者保存到磁盘上，就需要把 str 变为以字节为单位的 bytes。"></a>如果要在网络上传输，或者保存到磁盘上，就需要把 str 变为以字节为单位的 bytes。</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">print(&apos;abc&apos;.encode(&apos;ascii&apos;))</div><div class="line">print(&apos;人生苦短&apos;.encode(&apos;utf-8&apos;))</div></pre></td></tr></table></figure>
-<h5 id="这样表示会报错，因为汉字在ASCII中没有编码"><a href="#这样表示会报错，因为汉字在ASCII中没有编码" class="headerlink" title="这样表示会报错，因为汉字在ASCII中没有编码"></a>这样表示会报错，因为汉字在ASCII中没有编码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># print(&apos;人生苦短&apos;.encode(&apos;ascii&apos;))</div></pre></td></tr></table></figure>
-<h5 id="反过来，如果我们从网络或磁盘上读取了字节流，那么读到的数据就是bytes。要把-bytes-变为-str，就需要用-decode-方法"><a href="#反过来，如果我们从网络或磁盘上读取了字节流，那么读到的数据就是bytes。要把-bytes-变为-str，就需要用-decode-方法" class="headerlink" title="反过来，如果我们从网络或磁盘上读取了字节流，那么读到的数据就是bytes。要把 bytes 变为 str，就需要用 decode()方法:"></a>反过来，如果我们从网络或磁盘上读取了字节流，那么读到的数据就是bytes。要把 bytes 变为 str，就需要用 decode()方法:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">print(b&apos;abc&apos;.decode(&apos;ascii&apos;))</div><div class="line">print(b&apos;\xe9\x83\xad\xe5\x81\xa5\xe8\xb1\xaa&apos;.decode(&apos;utf-8&apos;))</div></pre></td></tr></table></figure>
+<h5 id="如果要在网络上传输，或者保存到磁盘上，就需要把-str-变为以字节为单位的-bytes。"><a href="#如果要在网络上传输，或者保存到磁盘上，就需要把-str-变为以字节为单位的-bytes。" class="headerlink" title="如果要在网络上传输，或者保存到磁盘上，就需要把 str 变为以字节为单位的 bytes。"></a>如果要在网络上传输，或者保存到磁盘上，就需要把 <code>str</code> 变为以字节为单位的 <code>bytes</code>。</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">print(&apos;abc&apos;.encode(&apos;ascii&apos;))</div><div class="line">print(&apos;人生苦短&apos;.encode(&apos;utf-8&apos;))</div></pre></td></tr></table></figure>
+<h5 id="这样表示会报错，因为汉字在ASCII中没有编码"><a href="#这样表示会报错，因为汉字在ASCII中没有编码" class="headerlink" title="这样表示会报错，因为汉字在ASCII中没有编码"></a>这样表示会报错，因为汉字在<code>ASCII</code>中没有编码</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"># print(&apos;人生苦短&apos;.encode(&apos;ascii&apos;))</div></pre></td></tr></table></figure>
+<h5 id="反过来，如果我们从网络或磁盘上读取了字节流，那么读到的数据就是bytes。要把-bytes-变为-str，就需要用-decode-方法"><a href="#反过来，如果我们从网络或磁盘上读取了字节流，那么读到的数据就是bytes。要把-bytes-变为-str，就需要用-decode-方法" class="headerlink" title="反过来，如果我们从网络或磁盘上读取了字节流，那么读到的数据就是bytes。要把 bytes 变为 str，就需要用 decode()方法:"></a>反过来，如果我们从网络或磁盘上读取了字节流，那么读到的数据就是<code>bytes</code>。要把 <code>bytes</code> 变为 <code>str</code>，就需要用 <code>decode()</code>方法:</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">print(b&apos;abc&apos;.decode(&apos;ascii&apos;))</div><div class="line">print(b&apos;\xe9\x83\xad\xe5\x81\xa5\xe8\xb1\xaa&apos;.decode(&apos;utf-8&apos;))</div></pre></td></tr></table></figure>
 
           
         
