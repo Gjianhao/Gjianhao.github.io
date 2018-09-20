@@ -275,6 +275,124 @@
             
               
                 
+                <a class="post-title-link" href="/2018/09/21/汇编还原高级代码-if判断/" itemprop="url">
+                  汇编还原高级代码-if判断
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2018-09-20T22:12:50Z" content="2018-09-20">
+              2018-09-20
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2018/09/21/汇编还原高级代码-if判断/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/09/21/汇编还原高级代码-if判断/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+             <span id="/2018/09/21/汇编还原高级代码-if判断/" class="leancloud_visitors" data-flag-title="汇编还原高级代码-if判断">
+               &nbsp; | &nbsp;
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               <span class="post-meta-item-text">阅读次数 </span>
+               <span class="leancloud-visitors-count"></span>
+              </span>
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h5 id="上一篇已经介绍了简单代码的还原，下面记录一下-if-条件判断的代码还原。"><a href="#上一篇已经介绍了简单代码的还原，下面记录一下-if-条件判断的代码还原。" class="headerlink" title="上一篇已经介绍了简单代码的还原，下面记录一下 if 条件判断的代码还原。"></a>上一篇已经介绍了简单代码的还原，下面记录一下 if 条件判断的代码还原。</h5><h6 id="高级代码如下："><a href="#高级代码如下：" class="headerlink" title="高级代码如下："></a>高级代码如下：</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">int g = 12;</div><div class="line"></div><div class="line">void func(int a,int b)&#123;</div><div class="line">if (a &gt; b) &#123;</div><div class="line">g = a;</div><div class="line">&#125;else&#123;</div><div class="line">g = b;</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">int main(int argc, char * argv[]) &#123;</div><div class="line">func(1, 2);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过 ida 得到的汇编代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">__text:00000001000068B4 _func                                   ; CODE XREF: _main+24↓p</div><div class="line">__text:00000001000068B4</div><div class="line">__text:00000001000068B4 var_8           = -8</div><div class="line">__text:00000001000068B4 var_4           = -4</div><div class="line">__text:00000001000068B4</div><div class="line">__text:00000001000068B4                 SUB             SP, SP, #0x10</div></pre></td></tr></table></figure>
+<h6 id="上面的代码还是开辟栈空间-。"><a href="#上面的代码还是开辟栈空间-。" class="headerlink" title="上面的代码还是开辟栈空间 。"></a>上面的代码还是开辟栈空间 。</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">__text:00000001000068B8                 STR             W0, [SP,#0x10+var_4]</div><div class="line">__text:00000001000068BC                 STR             W1, [SP,#0x10+var_8]</div><div class="line">__text:00000001000068C0                 LDR             W0, [SP,#0x10+var_4]</div><div class="line">__text:00000001000068C4                 LDR             W1, [SP,#0x10+var_8]</div></pre></td></tr></table></figure>
+<h6 id="上面判断这个-func-方法有两个参数；"><a href="#上面判断这个-func-方法有两个参数；" class="headerlink" title="上面判断这个 func 方法有两个参数；"></a>上面判断这个 func 方法有两个参数；</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">// if (a &gt; b) &#123;</div><div class="line">__text:00000001000068C8                 CMP             W0, W1</div><div class="line">__text:00000001000068CC                 B.LE            loc_1000068E4</div></pre></td></tr></table></figure>
+<h6 id="上面的比较相当于-if-语句，小于等于的话执行后面的地址，否则的话继续执行下面的方法；"><a href="#上面的比较相当于-if-语句，小于等于的话执行后面的地址，否则的话继续执行下面的方法；" class="headerlink" title="上面的比较相当于 if 语句，小于等于的话执行后面的地址，否则的话继续执行下面的方法；"></a>上面的比较相当于 if 语句，小于等于的话执行后面的地址，否则的话继续执行下面的方法；</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">__text:00000001000068D0                 ADRP            X8, #_g@PAGE</div><div class="line">__text:00000001000068D4                 ADD             X8, X8, #_g@PAGEOFF</div><div class="line">// int *X8 = &amp;9;</div></pre></td></tr></table></figure>
+<h6 id="得到一个全局变量-g的地址-，放到-X8中，-x8是个地址，"><a href="#得到一个全局变量-g的地址-，放到-X8中，-x8是个地址，" class="headerlink" title="得到一个全局变量 g的地址 ，放到 X8中， x8是个地址，"></a>得到一个全局变量 g的地址 ，放到 X8中， x8是个地址，</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">__text:00000001000068D8                 LDR             W9, [SP,#0x10+var_4]</div><div class="line">// int w9 = var_4;</div><div class="line">__text:00000001000068DC                 STR             W9, [X8]</div><div class="line">// *x8 = w9;</div></pre></td></tr></table></figure>
+<h6 id="将-w9的值赋给-x8"><a href="#将-w9的值赋给-x8" class="headerlink" title="将 w9的值赋给 x8"></a>将 w9的值赋给 x8</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">__text:00000001000068E0                 B               loc_1000068F4</div><div class="line">__text:00000001000068E4 ; ---------------------------------------------------------------------------</div><div class="line">__text:00000001000068E4</div><div class="line">__text:00000001000068E4 loc_1000068E4                           ; CODE XREF: _func+18↑j</div><div class="line">__text:00000001000068E4                 ADRP            X8, #_g@PAGE</div><div class="line">__text:00000001000068E8                 ADD             X8, X8, #_g@PAGEOFF</div><div class="line">__text:00000001000068EC                 LDR             W9, [SP,#0x10+var_8]</div><div class="line">__text:00000001000068F0                 STR             W9, [X8]</div><div class="line">__text:00000001000068F4</div><div class="line">__text:00000001000068F4 loc_1000068F4                           ; CODE XREF: _func+2C↑j</div><div class="line">__text:00000001000068F4                 ADD             SP, SP, #0x10</div><div class="line">__text:00000001000068F8                 RET</div><div class="line">__text:00000001000068F8 ; End of function _func</div><div class="line">__text:00000001000068F8</div><div class="line">__text:00000001000068FC</div><div class="line">__text:00000001000068FC ; =============== S U B R O U T I N E =======================================</div><div class="line">__text:00000001000068FC</div><div class="line">__text:00000001000068FC ; Attributes: bp-based frame</div><div class="line">__text:00000001000068FC</div><div class="line">__text:00000001000068FC ; int __cdecl main(int argc, const char **argv, const char **envp)</div></pre></td></tr></table></figure>
+<h6 id="下面是mian-函数的汇编："><a href="#下面是mian-函数的汇编：" class="headerlink" title="下面是mian 函数的汇编："></a>下面是mian 函数的汇编：</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">__text:00000001000068FC                 EXPORT _main</div><div class="line">__text:00000001000068FC _main</div><div class="line">__text:00000001000068FC</div><div class="line">__text:00000001000068FC var_10          = -0x10</div><div class="line">__text:00000001000068FC var_4           = -4</div><div class="line">__text:00000001000068FC var_s0          =  0</div><div class="line">__text:00000001000068FC</div><div class="line">__text:00000001000068FC                 SUB             SP, SP, #0x20</div><div class="line">__text:0000000100006900                 STP             X29, X30, [SP,#0x10+var_s0]</div><div class="line">__text:0000000100006904                 ADD             X29, SP, #0x10</div><div class="line">__text:0000000100006908                 MOV             W8, #1</div><div class="line">__text:000000010000690C                 MOV             W9, #2</div><div class="line">__text:0000000100006910                 STUR            W0, [X29,#var_4]</div><div class="line">__text:0000000100006914                 STR             X1, [SP,#0x10+var_10]</div><div class="line">__text:0000000100006918                 MOV             X0, X8</div><div class="line">__text:000000010000691C                 MOV             X1, X9</div><div class="line">__text:0000000100006920                 BL              _func</div><div class="line">__text:0000000100006924                 MOV             W8, #0</div><div class="line">__text:0000000100006928                 MOV             X0, X8</div><div class="line">__text:000000010000692C                 LDP             X29, X30, [SP,#0x10+var_s0]</div><div class="line">__text:0000000100006930                 ADD             SP, SP, #0x20</div><div class="line">__text:0000000100006934                 RET</div><div class="line">__text:0000000100006934 ; End of function _main</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="//schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2018/09/17/简单汇编还原高级代码/" itemprop="url">
                   简单汇编还原高级代码
                 </a>
@@ -1205,7 +1323,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">8</span>
+              <span class="site-state-item-count">9</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
